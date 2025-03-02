@@ -11,6 +11,9 @@ const cookieParser = require("cookie-parser");
 
 connectToDb();
 
+// Serve React static files
+app.use(express.static(path.join(__dirname, 'build')));
+
 app.use(cookieParser());
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -21,6 +24,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.send('Hello World');
+});
+
+// Catch-all route to serve React frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.use('/users', userRoutes);
